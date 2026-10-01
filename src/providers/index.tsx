@@ -1,8 +1,8 @@
 "use client";
 
 import { ReactNode } from "react";
-import QueryProvider from "./query.provider";
-import GoogleAuthProvider from "./google-auth.provider";
+import QueryProvider from "../providers/query.provider";
+import GoogleAuthProvider from "../providers/google-auth.provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
 export default function Providers({ children }: { children: ReactNode }) {
