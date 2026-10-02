@@ -1,5 +1,5 @@
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { DashboardSidebar } from "./dashboard-sidebar";
+import { DashboardSidebar } from "../dashboard/dashboard-sidebar";
 import { ReactNode } from "react";
 import { UserRole } from "@/types";
 
