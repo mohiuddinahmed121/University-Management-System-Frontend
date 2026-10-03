@@ -3,9 +3,9 @@
 import { useForm } from "@tanstack/react-form";
 import {
    BriefcaseBusiness,
+   Building2,
    FileText,
    FileUp,
-   GraduationCap,
    Mail,
    MapPin,
    Phone,
@@ -15,10 +15,9 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { instructorApplicationSchema, MAX_FILE_SIZE } from "@/validation";
+import { instructorApplyFormSchema, MAX_FILE_SIZE } from "@/validation";
 import { formatFileSize } from "@/utils";
 import { InstructorApplicationData } from "@/types";
 import { useApplyAsInstructor } from "@/hooks/instructor.hook";
@@ -36,14 +35,13 @@ export default function InstructorApplyForm() {
          phone: "",
          address: "",
          specialization: "",
-         qualifications: "",
-         experienceYears: "",
-         bio: "",
+         designation: "",
+         departmentId: "",
          resume: null as File | null,
       },
 
       validators: {
-         onSubmit: instructorApplicationSchema,
+         onSubmit: instructorApplyFormSchema,
       },
 
       onSubmit: ({ value }) => {
@@ -54,11 +52,10 @@ export default function InstructorApplyForm() {
             },
             instructor: {
                specialization: value.specialization.trim(),
-               qualifications: value.qualifications.trim(),
-               experienceYears: Number(value.experienceYears),
+               designation: value.designation.trim(),
                contactNumber: value.phone.trim(),
                address: value.address.trim(),
-               bio: value.bio.trim(),
+               departmentId: value.departmentId,
             },
          };
 
@@ -263,50 +260,20 @@ export default function InstructorApplyForm() {
                      }}
                   </form.Field>
 
-                  <form.Field name="qualifications">
+                  <form.Field name="designation">
                      {(field) => {
                         const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
 
                         return (
                            <Field data-invalid={isInvalid}>
-                              <FieldLabel htmlFor={field.name}>Qualifications</FieldLabel>
-                              <div className="relative">
-                                 <GraduationCap className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-                                 <Input
-                                    id={field.name}
-                                    name={field.name}
-                                    type="text"
-                                    placeholder="BSc, MSc, PhD"
-                                    value={field.state.value}
-                                    onBlur={field.handleBlur}
-                                    onChange={(e) => field.handleChange(e.target.value)}
-                                    aria-invalid={isInvalid}
-                                    className="pl-9"
-                                 />
-                              </div>
-                              {isInvalid && <FieldError errors={field.state.meta.errors} />}
-                           </Field>
-                        );
-                     }}
-                  </form.Field>
-
-                  <form.Field name="experienceYears">
-                     {(field) => {
-                        const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
-
-                        return (
-                           <Field data-invalid={isInvalid}>
-                              <FieldLabel htmlFor={field.name}>Years of experience</FieldLabel>
+                              <FieldLabel htmlFor={field.name}>Designation</FieldLabel>
                               <div className="relative">
                                  <BriefcaseBusiness className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
                                  <Input
                                     id={field.name}
                                     name={field.name}
-                                    type="number"
-                                    min={0}
-                                    max={70}
-                                    inputMode="numeric"
-                                    placeholder="5"
+                                    type="text"
+                                    placeholder="Assistant Professor"
                                     value={field.state.value}
                                     onBlur={field.handleBlur}
                                     onChange={(e) => field.handleChange(e.target.value)}
@@ -321,30 +288,26 @@ export default function InstructorApplyForm() {
                   </form.Field>
                </div>
 
-               <form.Field name="bio">
+               <form.Field name="departmentId">
                   {(field) => {
                      const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
 
                      return (
                         <Field data-invalid={isInvalid}>
-                           <FieldLabel htmlFor={field.name}>Professional bio</FieldLabel>
-                           <Textarea
-                              id={field.name}
-                              name={field.name}
-                              rows={4}
-                              placeholder="Share your academic background and teaching experience..."
-                              value={field.state.value}
-                              onBlur={field.handleBlur}
-                              onChange={(e) => field.handleChange(e.target.value)}
-                              aria-invalid={isInvalid}
-                           />
-                           <div className="flex items-center justify-between gap-2">
-                              <FieldDescription>
-                                 Shown on your profile after approval.
-                              </FieldDescription>
-                              <span className="text-xs text-muted-foreground">
-                                 {field.state.value.length}/1000
-                              </span>
+                           <FieldLabel htmlFor={field.name}>Department</FieldLabel>
+                           <div className="relative">
+                              <Building2 className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                              <Input
+                                 id={field.name}
+                                 name={field.name}
+                                 type="text"
+                                 placeholder="Department ID"
+                                 value={field.state.value}
+                                 onBlur={field.handleBlur}
+                                 onChange={(e) => field.handleChange(e.target.value)}
+                                 aria-invalid={isInvalid}
+                                 className="pl-9"
+                              />
                            </div>
                            {isInvalid && <FieldError errors={field.state.meta.errors} />}
                         </Field>

@@ -52,6 +52,21 @@ export const applyAsInstructorSchema = z.object({
    ),
 });
 
+export const instructorApplyFormSchema = z.object({
+   name: z.string().trim().min(2, "Full name must be at least 2 characters long"),
+   email: z.email("Please enter a valid email address"),
+   phone: z.string().trim().min(5, "Contact number is invalid"),
+   address: z.string().trim(),
+   specialization: z.string().trim(),
+   designation: z.string().trim(),
+   departmentId: z.string().min(1, "Department is required"),
+   resume: getCustomFileSchema<File | null>(
+      `Resume must be a PDF, DOC, DOCX or an image file under ${MAX_FILE_SIZE}MB`,
+   ).refine((value) => value instanceof File, {
+      message: "A resume or CV is required",
+   }),
+});
+
 // matches IUpdateInstructorProfilePayload — identical to your backend's own schema
 export const updateInstructorProfileSchema = z.object({
    address: z.string().trim().min(5, "Address must be at least 5 characters long").optional(),

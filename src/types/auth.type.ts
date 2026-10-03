@@ -3,7 +3,8 @@ export interface RegistrationPayload {
    email: string;
    password: string;
    student: {
-      studentId?: string;
+      contactNumber?: string;
+      programId: string;
    };
 }
 

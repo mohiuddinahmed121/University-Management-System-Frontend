@@ -25,7 +25,8 @@ export function RegisterForm() {
    const defaultValues: StudentDefaultValues = {
       name: "",
       email: "",
-      studentId: "",
+      contactNumber: "",
+      programId: "",
       password: "",
       confirmPassword: "",
    };
@@ -43,7 +44,8 @@ export function RegisterForm() {
             email: value.email,
             password: value.password,
             student: {
-               studentId: value.studentId || undefined,
+               contactNumber: value.contactNumber || undefined,
+               programId: value.programId,
             },
          };
 
@@ -146,7 +148,7 @@ export function RegisterForm() {
                   }}
                </form.Field>
 
-               <form.Field name="studentId">
+               <form.Field name="contactNumber">
                   {(field) => {
                      const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
 

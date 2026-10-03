@@ -1,28 +1,34 @@
 "use client";
 
-import { useForm } from "@tanstack/react-form";
-import { Input } from "../../components/ui/input";
-import { Button } from "../ui/button";
-import {
-   Field,
-   FieldError,
-   FieldGroup,
-   FieldLabel,
-   FieldSeparator,
-} from "../../components/ui/field";
-import { loginSchema } from "@/validation";
 import { useState } from "react";
-import { Eye, EyeClosed } from "lucide-react";
-import { useGoogleOAuth, useLogin } from "@/hooks";
 import { useRouter } from "next/navigation";
-import { toast } from "../../components/ui/toast";
-import { Spinner } from "@/components/ui/spinner";
 import Link from "next/link";
-import GoogleLoginComponent from "../modules/google-login/GoogleLogin";
+import { useQueryClient } from "@tanstack/react-query";
+import { useForm } from "@tanstack/react-form";
+import { Eye, EyeClosed } from "lucide-react";
+
+import { getMe } from "@/api";
+import { useLogin } from "@/hooks";
+import { loginSchema } from "@/validation";
+import type { UserRole } from "@/types";
+
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Field, FieldError, FieldGroup, FieldLabel, FieldSeparator } from "@/components/ui/field";
+import { Spinner } from "@/components/ui/spinner";
+import { toast } from "@/components/ui/toast";
+import GoogleLoginComponent from "@/components/modules/google-login/GoogleLogin";
+
+const roleRoutes: Record<UserRole, string> = {
+   ADMIN: "/admin",
+   INSTRUCTOR: "/instructor",
+   STUDENT: "/student",
+};
 
 export default function LoginForm() {
    const [showPassword, setShowPassword] = useState(false);
    const router = useRouter();
+   const queryClient = useQueryClient();
 
    const { mutate: login, isPending: loginPending } = useLogin();
 
@@ -41,18 +47,41 @@ export default function LoginForm() {
                password: value.password,
             },
             {
-               onSuccess: () => {
-                  toast.add({
-                     title: "Login Success",
-                     description: "Welcome back",
-                     type: "success",
-                  });
-                  router.push("/");
+               onSuccess: async () => {
+                  try {
+                     // Backend sets the auth cookies during login.
+                     // Fetch the authenticated user's role from /auth/me.
+                     const response = await getMe();
+
+                     queryClient.setQueryData(["user"], response);
+
+                     const role = response.data.role as UserRole;
+                     const destination = roleRoutes[role];
+
+                     if (!destination) {
+                        throw new Error("Your account has an unsupported role.");
+                     }
+
+                     toast.add({
+                        title: "Login Success",
+                        description: "Welcome back",
+                        type: "success",
+                     });
+
+                     router.replace(destination);
+                  } catch (error) {
+                     toast.add({
+                        title: "Could not load your account",
+                        description:
+                           error instanceof Error ? error.message : "Please try logging in again.",
+                        type: "error",
+                     });
+                  }
                },
                onError: (err) => {
                   toast.add({
                      title: "Authorization failure",
-                     description: err.message || "Something went wrong. Please try again",
+                     description: err.message || "Something went wrong. Please try again.",
                      type: "error",
                   });
                },
@@ -63,16 +92,17 @@ export default function LoginForm() {
 
    return (
       <div className="flex flex-col gap-5">
+         {" "}
          <div className="flex flex-col items-center gap-2 text-center">
-            <h1 className="text-2xl font-bold tracking-tight">Login to your account</h1>
+            {" "}
+            <h1 className="text-2xl font-bold tracking-tight">Login to your account </h1>{" "}
             <p className="text-balance text-sm text-muted-foreground">
-               Enter your email below to login to your account
-            </p>
+               Enter your email below to login to your account{" "}
+            </p>{" "}
          </div>
-
          <form
-            onSubmit={(e) => {
-               e.preventDefault();
+            onSubmit={(event) => {
+               event.preventDefault();
                form.handleSubmit();
             }}
          >
@@ -88,9 +118,9 @@ export default function LoginForm() {
                               id={field.name}
                               name={field.name}
                               type="email"
-                              onChange={(e) => field.handleChange(e.target.value)}
-                              onBlur={field.handleBlur}
                               value={field.state.value}
+                              onChange={(event) => field.handleChange(event.target.value)}
+                              onBlur={field.handleBlur}
                               autoComplete="email"
                               aria-invalid={isInvalid}
                            />
@@ -112,16 +142,16 @@ export default function LoginForm() {
                                  id={field.name}
                                  name={field.name}
                                  type={showPassword ? "text" : "password"}
-                                 onChange={(e) => field.handleChange(e.target.value)}
-                                 onBlur={field.handleBlur}
                                  value={field.state.value}
+                                 onChange={(event) => field.handleChange(event.target.value)}
+                                 onBlur={field.handleBlur}
                                  autoComplete="current-password"
                                  aria-invalid={isInvalid}
                               />
                               <button
                                  className="absolute right-3 top-1/2 -translate-y-1/2"
                                  type="button"
-                                 onClick={() => setShowPassword((prev) => !prev)}
+                                 onClick={() => setShowPassword((previous) => !previous)}
                                  aria-label={showPassword ? "Hide password" : "Show password"}
                               >
                                  {showPassword ? (
@@ -140,7 +170,8 @@ export default function LoginForm() {
                <Button disabled={loginPending} type="submit">
                   {loginPending ? (
                      <>
-                        <Spinner /> Submitting
+                        <Spinner />
+                        Submitting
                      </>
                   ) : (
                      "Submit"
@@ -148,11 +179,8 @@ export default function LoginForm() {
                </Button>
             </FieldGroup>
          </form>
-
          <FieldSeparator>Or continue with</FieldSeparator>
-
          <GoogleLoginComponent />
-
          <div className="text-center text-sm text-muted-foreground">
             Don&apos;t have an account?{" "}
             <Link
