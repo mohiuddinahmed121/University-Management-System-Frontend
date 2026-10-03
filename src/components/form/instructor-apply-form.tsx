@@ -23,7 +23,7 @@ import { formatFileSize } from "@/utils";
 import { InstructorApplicationData } from "@/types";
 import { useApplyAsInstructor } from "@/hooks";
 import { toast } from "../ui/toast";
-import { Spinner } from "../ui/spinner";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function InstructorApplyForm() {
    const router = useRouter();

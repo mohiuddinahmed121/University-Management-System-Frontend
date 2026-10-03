@@ -12,8 +12,8 @@ import { Input } from "@/components/ui/input";
 import { useRegistration } from "@/hooks";
 import { studentRegistrationSchema } from "@/validation";
 import GoogleLoginComponent from "../modules/google-login/GoogleLogin";
-import { toast } from "../ui/toast";
-import { Spinner } from "../ui/spinner";
+import { toast } from "@/components/ui/toast";
+import { Spinner } from "@/components/ui/spinner";
 
 export function RegisterForm() {
    const router = useRouter();

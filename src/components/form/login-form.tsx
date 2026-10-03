@@ -1,16 +1,22 @@
 "use client";
 
 import { useForm } from "@tanstack/react-form";
-import { Input } from "../ui/input";
+import { Input } from "../../components/ui/input";
 import { Button } from "../ui/button";
-import { Field, FieldError, FieldGroup, FieldLabel, FieldSeparator } from "../ui/field";
+import {
+   Field,
+   FieldError,
+   FieldGroup,
+   FieldLabel,
+   FieldSeparator,
+} from "../../components/ui/field";
 import { loginSchema } from "@/validation";
 import { useState } from "react";
 import { Eye, EyeClosed } from "lucide-react";
 import { useGoogleOAuth, useLogin } from "@/hooks";
 import { useRouter } from "next/navigation";
-import { toast } from "../ui/toast";
-import { Spinner } from "../ui/spinner";
+import { toast } from "../../components/ui/toast";
+import { Spinner } from "@/components/ui/spinner";
 import Link from "next/link";
 import GoogleLoginComponent from "../modules/google-login/GoogleLogin";
 
