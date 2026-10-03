@@ -21,7 +21,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { instructorApplicationSchema, MAX_FILE_SIZE } from "@/validation";
 import { formatFileSize } from "@/utils";
 import { InstructorApplicationData } from "@/types";
-import { useApplyAsInstructor } from "@/hooks";
+import { useApplyAsInstructor } from "@/hooks/instructor.hook";
 import { toast } from "../ui/toast";
 import { Spinner } from "@/components/ui/spinner";
 
