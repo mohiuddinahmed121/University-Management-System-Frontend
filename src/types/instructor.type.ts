@@ -4,12 +4,11 @@ export interface InstructorApplicationData {
       email: string;
    };
    instructor: {
-      specialization: string;
-      qualifications: string;
-      experienceYears: number;
-      contactNumber: string;
-      address: string;
-      bio: string;
+      address?: string;
+      specialization?: string;
+      designation?: string;
+      contactNumber?: string;
+      departmentId: string;
    };
 }
 

@@ -3,7 +3,6 @@ import { InstructorApplicationPayload, VerifyAccountPayload } from "@/types";
 
 export function applyAsInstructor(payload: InstructorApplicationPayload) {
    const formData = new FormData();
-
    formData.append("data", JSON.stringify(payload.data));
    formData.append("resume", payload.resume);
 
