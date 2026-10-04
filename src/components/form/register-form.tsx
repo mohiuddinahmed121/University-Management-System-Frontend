@@ -43,10 +43,12 @@ export function RegisterForm() {
             name: value.name,
             email: value.email,
             password: value.password,
-            student: {
-               contactNumber: value.contactNumber || undefined,
-               programId: value.programId,
-            },
+            ...(value.programId && {
+               student: {
+                  contactNumber: value.contactNumber || undefined,
+                  programId: value.programId,
+               },
+            }),
          };
 
          registration(registrationData, {
@@ -154,12 +156,43 @@ export function RegisterForm() {
 
                      return (
                         <Field data-invalid={isInvalid}>
-                           <FieldLabel htmlFor={field.name}>Student ID (Optional)</FieldLabel>
+                           <FieldLabel htmlFor={field.name}>
+                              Contact Number{" "}
+                              <span className="font-normal text-muted-foreground">(optional)</span>
+                           </FieldLabel>
                            <Input
                               id={field.name}
                               name={field.name}
                               type="text"
-                              placeholder="Enter your student ID"
+                              placeholder="+880 1712 345678"
+                              value={field.state.value}
+                              onBlur={field.handleBlur}
+                              onChange={(e) => field.handleChange(e.target.value)}
+                              aria-invalid={isInvalid}
+                           />
+                           {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                        </Field>
+                     );
+                  }}
+               </form.Field>
+
+               <form.Field name="programId">
+                  {(field) => {
+                     const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+
+                     return (
+                        <Field data-invalid={isInvalid}>
+                           <FieldLabel htmlFor={field.name}>
+                              Program{" "}
+                              <span className="font-normal text-muted-foreground">
+                                 (optional — can be set later)
+                              </span>
+                           </FieldLabel>
+                           <Input
+                              id={field.name}
+                              name={field.name}
+                              type="text"
+                              placeholder="Program ID"
                               value={field.state.value}
                               onBlur={field.handleBlur}
                               onChange={(e) => field.handleChange(e.target.value)}

@@ -27,7 +27,7 @@ export default function VerifyAccountPage() {
 
          <div className="relative hidden bg-muted lg:block">
             <img
-               src="/register.jpg"
+               src="/registration.jpg"
                alt="University campus"
                className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
             />

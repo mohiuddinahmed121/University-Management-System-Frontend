@@ -13,7 +13,7 @@ export const loginSchema = z.object({
 
 export const studentRegistrationSchema = z
    .object({
-      name: z.string().trim().min(3, "Name must be at least 3 characters long").max(50),
+      name: z.string().trim().min(3, "Name must be at least 3 characters long").max(100),
       email: z.email("Please provide a valid email"),
       password: z
          .string()
@@ -24,7 +24,7 @@ export const studentRegistrationSchema = z
          .regex(/[^A-Za-z0-9]/, "Password must contain atleast 1 Special Character"),
       confirmPassword: z.string().min(1, "Please confirm your password"),
       contactNumber: z.string().trim(),
-      programId: z.string().min(1, "Program is required"),
+      programId: z.string().trim(), // আর required না
    })
    .refine((data) => data.password === data.confirmPassword, {
       message: "Password do not match",

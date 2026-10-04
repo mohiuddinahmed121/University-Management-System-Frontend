@@ -14,7 +14,7 @@ import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp
 import { Field, FieldDescription, FieldError, FieldLabel } from "@/components/ui/field";
 import { useEffect, useState } from "react";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
-import { useVerifyAccount } from "@/hooks";
+import { useVerifyAccount, useVerifyInstructorEmail } from "@/hooks";
 import { toast } from "@/components/ui/toast";
 
 const RESEND_COOLDOWN = 120;
@@ -31,7 +31,8 @@ export default function VerifyAccountForm({
    const [isInvalid, setIsInvalid] = useState(false);
    const [resendTimer, setResendTimer] = useState(RESEND_COOLDOWN);
 
-   const { mutate: verifyAccount } = useVerifyAccount();
+   const { mutate: verifyStudentAccount } = useVerifyAccount();
+   const { mutate: verifyInstructorAccount } = useVerifyInstructorEmail();
 
    const email = searchParams.get("email") || "";
 
@@ -59,45 +60,47 @@ export default function VerifyAccountForm({
          return;
       }
 
-      verifyAccount(
-         { email, otp },
-         {
-            onSuccess: (res) => {
-               if (!res.success) {
-                  toast.add({
-                     title: "Server Failure",
-                     description: "Something went wrong. Please try again",
-                     type: "error",
-                  });
-                  return;
-               }
+      const onSuccess = (res: { success: boolean }) => {
+         if (!res.success) {
+            toast.add({
+               title: "Server Failure",
+               description: "Something went wrong. Please try again",
+               type: "error",
+            });
+            return;
+         }
 
-               if (mode === "instructor") {
-                  toast.add({
-                     title: "Verification Successful",
-                     description: "Your application is submitted. An admin will review it.",
-                     type: "success",
-                  });
-                  router.push("/");
-                  return;
-               }
+         if (mode === "instructor") {
+            toast.add({
+               title: "Verification Successful",
+               description: "Your application is submitted. An admin will review it.",
+               type: "success",
+            });
+            router.push("/");
+            return;
+         }
 
-               toast.add({
-                  title: "Verification Successful",
-                  description: "Welcome onboard",
-                  type: "success",
-               });
-               router.push("/");
-            },
-            onError: (err) => {
-               toast.add({
-                  title: "Verification failure",
-                  description: err.message || "Something went wrong. Please try again",
-                  type: "error",
-               });
-            },
-         },
-      );
+         toast.add({
+            title: "Verification Successful",
+            description: "Welcome onboard",
+            type: "success",
+         });
+         router.push("/");
+      };
+
+      const onError = (err: { message?: string }) => {
+         toast.add({
+            title: "Verification failure",
+            description: err.message || "Something went wrong. Please try again",
+            type: "error",
+         });
+      };
+
+      if (mode === "instructor") {
+         verifyInstructorAccount({ email, otp }, { onSuccess, onError });
+      } else {
+         verifyStudentAccount({ email, otp }, { onSuccess, onError });
+      }
    };
 
    if (!email) {

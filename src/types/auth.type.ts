@@ -2,7 +2,7 @@ export interface RegistrationPayload {
    name: string;
    email: string;
    password: string;
-   student: {
+   student?: {
       contactNumber?: string;
       programId: string;
    };
