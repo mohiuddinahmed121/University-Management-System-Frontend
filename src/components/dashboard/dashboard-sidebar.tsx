@@ -6,13 +6,11 @@ import {
    SidebarGroup,
    SidebarGroupContent,
    SidebarGroupLabel,
-   SidebarHeader,
    SidebarMenu,
    SidebarMenuButton,
    SidebarMenuItem,
    SidebarRail,
 } from "@/components/ui/sidebar";
-import Logo from "@/assets/svg/Logo";
 import { UserRole } from "@/types";
 import { SidebarItems } from "@/types/sidebar.type";
 import { adminRoutes, instructorRoutes, studentRoutes } from "@/routes";
@@ -30,16 +28,8 @@ export function DashboardSidebar({ role }: { role: UserRole }) {
    const routes: SidebarItems = sidebarRoutes[role] || [];
 
    return (
-      <Sidebar>
-         <SidebarHeader>
-            <Link href="/">
-               <div className="flex items-center gap-2">
-                  <Logo />
-                  <span>University Management System</span>
-               </div>
-            </Link>
-         </SidebarHeader>
-
+      // Header-er height (h-16 = 4rem) er niche theke shuru
+      <Sidebar className="top-16 h-[calc(100svh-4rem)]">
          <SidebarContent>
             {routes.map((group) => (
                <SidebarGroup key={group.title}>
