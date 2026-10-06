@@ -4,13 +4,16 @@ import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/toast";
-import { useCreateCourse, useDeleteCourse, useGetAllCourses } from "@/hooks";
 import Link from "next/link";
 import { useState } from "react";
+import { useCreateCourse, useDeleteCourse, useGetAllCourses, useGetAllDepartments } from "@/hooks";
 
 export default function AdminCoursesPage() {
    const [searchTerm, setSearchTerm] = useState("");
    const [showForm, setShowForm] = useState(false);
+
+   const { data: departmentData } = useGetAllDepartments({ limit: 100 });
+   const departments = departmentData?.data ?? [];
 
    const [form, setForm] = useState({
       code: "",
@@ -116,12 +119,19 @@ export default function AdminCoursesPage() {
                </Field>
 
                <Field>
-                  <FieldLabel>Department ID</FieldLabel>
-                  <Input
+                  <FieldLabel>Department</FieldLabel>
+                  <select
                      value={form.departmentId}
                      onChange={(e) => setForm({ ...form, departmentId: e.target.value })}
-                     placeholder="Department ID (Departments page থেকে copy করুন)"
-                  />
+                     className="w-full rounded-md border px-3 py-2 text-sm"
+                  >
+                     <option value="">Select Department</option>
+                     {departments.map((dept) => (
+                        <option key={dept.id} value={dept.id}>
+                           {dept.name} ({dept.code})
+                        </option>
+                     ))}
+                  </select>
                </Field>
 
                <Field className="sm:col-span-2">
