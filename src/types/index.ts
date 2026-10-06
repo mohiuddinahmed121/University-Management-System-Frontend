@@ -4,3 +4,4 @@ export * from "./instructor.type";
 export * from "./admin.type";
 export * from "./course.type";
 export * from "./department.type";
+export * from "./program.type";
