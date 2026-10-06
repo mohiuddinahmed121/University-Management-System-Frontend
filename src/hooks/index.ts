@@ -6,3 +6,4 @@ export * from "./admin.hook";
 export * from "./course.hook";
 export * from "./department.hook";
 export * from "./program.hook";
+export * from "./semester.hook";
