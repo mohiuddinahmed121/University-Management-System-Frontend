@@ -5,3 +5,4 @@ export * from "./department";
 export * from "./program";
 export * from "./semester";
 export * from "./section";
+export * from "./registration";

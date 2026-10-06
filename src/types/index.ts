@@ -7,3 +7,4 @@ export * from "./department.type";
 export * from "./program.type";
 export * from "./semester.type";
 export * from "./section.type";
+export * from "./registration.type";

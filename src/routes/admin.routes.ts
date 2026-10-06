@@ -36,6 +36,10 @@ export const adminRoutes = [
             title: "Sections",
             url: `${prefix}/sections`,
          },
+         {
+            title: "Registrations",
+            url: `${prefix}/registrations`,
+         },
       ],
    },
 ];
