@@ -9,6 +9,10 @@ export const adminRoutes = [
             url: `${prefix}`,
          },
          {
+            title: "All Users", // ← এই লাইনটা নতুন যোগ করুন
+            url: `${prefix}/users`,
+         },
+         {
             title: "Instructor Applications",
             url: `${prefix}/instructor-applications`,
          },
