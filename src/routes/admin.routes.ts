@@ -40,6 +40,7 @@ export const adminRoutes = [
             title: "Registrations",
             url: `${prefix}/registrations`,
          },
+         { title: "Results", url: `${prefix}/results` },
       ],
    },
 ];

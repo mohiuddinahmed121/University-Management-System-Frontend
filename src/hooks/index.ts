@@ -8,3 +8,7 @@ export * from "./department.hook";
 export * from "./program.hook";
 export * from "./semester.hook";
 export * from "./section.hook";
+export * from "./registration.hook";
+export * from "./result.hook";
+export * from "./student.hook";
+export * from "./payment.hook";

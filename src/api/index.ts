@@ -6,3 +6,6 @@ export * from "./program";
 export * from "./semester";
 export * from "./section";
 export * from "./registration";
+export * from "./result";
+export * from "./student";
+export * from "./payment";
