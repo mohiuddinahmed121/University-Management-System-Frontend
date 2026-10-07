@@ -38,7 +38,7 @@ export interface IStudent {
 export interface IUpdateStudentProfilePayload {
    address?: string;
    contactNumber?: string;
-   dateOfBirth?: string;
+   dateOfBirth?: Date;
    gender?: "MALE" | "FEMALE" | "OTHER";
 }
 

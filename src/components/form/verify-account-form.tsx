@@ -16,8 +16,17 @@ import { useEffect, useState } from "react";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { useVerifyAccount, useVerifyInstructorEmail } from "@/hooks";
 import { toast } from "@/components/ui/toast";
+import { getMe } from "@/api";
+import { useQueryClient } from "@tanstack/react-query";
+import type { UserRole } from "@/types";
 
 const RESEND_COOLDOWN = 120;
+
+const roleRoutes: Record<UserRole, string> = {
+   ADMIN: "/admin",
+   INSTRUCTOR: "/instructor",
+   STUDENT: "/student",
+};
 
 export default function VerifyAccountForm({
    mode = "student",
@@ -26,6 +35,7 @@ export default function VerifyAccountForm({
 }) {
    const searchParams = useSearchParams();
    const router = useRouter();
+   const queryClient = useQueryClient();
 
    const [otp, setOtp] = useState("");
    const [isInvalid, setIsInvalid] = useState(false);
@@ -60,7 +70,7 @@ export default function VerifyAccountForm({
          return;
       }
 
-      const onSuccess = (res: { success: boolean }) => {
+      const onSuccess = async (res: { success: boolean }) => {
          if (!res.success) {
             toast.add({
                title: "Server Failure",
@@ -80,12 +90,35 @@ export default function VerifyAccountForm({
             return;
          }
 
-         toast.add({
-            title: "Verification Successful",
-            description: "Welcome onboard",
-            type: "success",
-         });
-         router.push("/");
+         try {
+            // Backend sets the auth cookies during verify-email as well.
+            // Fetch the authenticated user's role and redirect accordingly.
+            const response = await getMe();
+
+            queryClient.setQueryData(["user"], response);
+
+            const role = response.data.role as UserRole;
+            const destination = roleRoutes[role];
+
+            if (!destination) {
+               throw new Error("Your account has an unsupported role.");
+            }
+
+            toast.add({
+               title: "Verification Successful",
+               description: "Welcome onboard",
+               type: "success",
+            });
+
+            router.replace(destination);
+         } catch (error) {
+            toast.add({
+               title: "Could not load your account",
+               description: error instanceof Error ? error.message : "Please try logging in again.",
+               type: "error",
+            });
+            router.push("/login");
+         }
       };
 
       const onError = (err: { message?: string }) => {

@@ -24,7 +24,7 @@ export const studentRegistrationSchema = z
          .regex(/[^A-Za-z0-9]/, "Password must contain atleast 1 Special Character"),
       confirmPassword: z.string().min(1, "Please confirm your password"),
       contactNumber: z.string().trim(),
-      programId: z.string().trim(), // আর required না
+      programId: z.string().min(1, "Please select your program"), // আর required না
    })
    .refine((data) => data.password === data.confirmPassword, {
       message: "Password do not match",

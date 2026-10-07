@@ -9,7 +9,7 @@ import z from "zod";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldGroup, FieldLabel, FieldSeparator } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { useRegistration } from "@/hooks";
+import { useGetAllPrograms, useRegistration } from "@/hooks";
 import { studentRegistrationSchema } from "@/validation";
 import GoogleLoginComponent from "../modules/google-login/GoogleLogin";
 import { toast } from "@/components/ui/toast";
@@ -19,6 +19,10 @@ export function RegisterForm() {
    const router = useRouter();
    const [showPassword, setShowPassword] = useState(false);
    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+   // Hook called at the top level of the component — not inside form.Field
+   const { data: programsData } = useGetAllPrograms({ limit: 100 });
+   const programs = programsData?.data ?? [];
 
    type StudentDefaultValues = z.infer<typeof studentRegistrationSchema>;
 
@@ -43,12 +47,10 @@ export function RegisterForm() {
             name: value.name,
             email: value.email,
             password: value.password,
-            ...(value.programId && {
-               student: {
-                  contactNumber: value.contactNumber || undefined,
-                  programId: value.programId,
-               },
-            }),
+            student: {
+               contactNumber: value.contactNumber || undefined,
+               programId: value.programId,
+            },
          };
 
          registration(registrationData, {
@@ -182,22 +184,23 @@ export function RegisterForm() {
 
                      return (
                         <Field data-invalid={isInvalid}>
-                           <FieldLabel htmlFor={field.name}>
-                              Program{" "}
-                              <span className="font-normal text-muted-foreground">
-                                 (optional — can be set later)
-                              </span>
-                           </FieldLabel>
-                           <Input
+                           <FieldLabel htmlFor={field.name}>Program</FieldLabel>
+                           <select
                               id={field.name}
                               name={field.name}
-                              type="text"
-                              placeholder="Program ID"
                               value={field.state.value}
                               onBlur={field.handleBlur}
                               onChange={(e) => field.handleChange(e.target.value)}
                               aria-invalid={isInvalid}
-                           />
+                              className="flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                           >
+                              <option value="">Select your program</option>
+                              {programs.map((program) => (
+                                 <option key={program.id} value={program.id}>
+                                    {program.name}
+                                 </option>
+                              ))}
+                           </select>
                            {isInvalid && <FieldError errors={field.state.meta.errors} />}
                         </Field>
                      );

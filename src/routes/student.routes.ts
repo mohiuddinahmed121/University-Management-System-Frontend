@@ -35,4 +35,17 @@ export const studentRoutes = [
          },
       ],
    },
+   {
+      title: "Account",
+      items: [
+         {
+            title: "My Profile",
+            url: `${prefix}/profile`,
+         },
+         {
+            title: "Payments",
+            url: `${prefix}/payments`,
+         },
+      ],
+   },
 ];
