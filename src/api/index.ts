@@ -9,3 +9,4 @@ export * from "./registration";
 export * from "./result";
 export * from "./student";
 export * from "./payment";
+export * from "./instructor.api";

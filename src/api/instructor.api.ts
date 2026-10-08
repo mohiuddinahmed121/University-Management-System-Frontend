@@ -1,5 +1,10 @@
 import apiClient from "@/lib/apiClient";
 import { InstructorApplicationPayload, VerifyAccountPayload } from "@/types";
+import type {
+   IApiResponse,
+   IInstructorPublicProfile,
+   IUpdateInstructorProfilePayload,
+} from "@/types";
 
 export function applyAsInstructor(payload: InstructorApplicationPayload) {
    const formData = new FormData();
@@ -18,3 +23,21 @@ export function verifyInstructorEmail(payload: VerifyAccountPayload) {
       body: payload,
    });
 }
+
+export const getInstructorPublicProfile = async (instructorId: string) => {
+   const res = await apiClient<IApiResponse<IInstructorPublicProfile>>(
+      `/instructor/public/${instructorId}`,
+   );
+   return res.data;
+};
+
+export const updateMyInstructorProfile = async (payload: IUpdateInstructorProfilePayload) => {
+   const res = await apiClient<IApiResponse<IInstructorPublicProfile>>(
+      "/instructor/update-my-profile",
+      {
+         method: "PATCH",
+         body: payload,
+      },
+   );
+   return res.data;
+};

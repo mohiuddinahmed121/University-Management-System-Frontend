@@ -2,49 +2,26 @@
 
 // import Logo from "@/assets/svg/Logo";
 // import { Button } from "@/components/ui/button";
-// import { toast } from "@/components/ui/toast";
-// import { useGetMe, useLogout } from "@/hooks";
+// import { useGetMe, useLogoutHandler } from "@/hooks";
 // import { UserRole } from "@/types";
-// import { useQueryClient } from "@tanstack/react-query";
 // import Link from "next/link";
 
+// const routes = [
+//    { name: "Home", url: "/" },
+//    { name: "About us", url: "/about-us" },
+// ];
+
+// const dashboardRoute: Record<UserRole, string> = {
+//    ADMIN: "/admin",
+//    INSTRUCTOR: "/instructor",
+//    STUDENT: "/student",
+// };
+
 // export default function Header() {
-//    const routes = [
-//       { name: "Home", url: "/" },
-//       { name: "About us", url: "/about-us" },
-//    ];
-
-//    const dashboardRoute: Record<UserRole, string> = {
-//       ADMIN: "/admin",
-//       INSTRUCTOR: "/instructor",
-//       STUDENT: "/student",
-//    };
-
 //    const { data, isLoading } = useGetMe();
-//    const { mutate: logout } = useLogout();
-//    const queryClient = useQueryClient();
+//    const { handleLogout } = useLogoutHandler();
 
 //    const role = data?.data?.role as UserRole | undefined;
-
-//    const handleLogout = () => {
-//       logout(undefined, {
-//          onSuccess: () => {
-//             toast.add({
-//                title: "Logged out",
-//                description: "Logged out successfully",
-//                type: "success",
-//             });
-//             queryClient.removeQueries({ queryKey: ["user"] });
-//          },
-//          onError: () => {
-//             toast.add({
-//                title: "Logout failed",
-//                description: "Something went wrong",
-//                type: "error",
-//             });
-//          },
-//       });
-//    };
 
 //    return (
 //       <header className="h-16 w-full border-b">
@@ -60,7 +37,6 @@
 //                      {route.name}
 //                   </Link>
 //                ))}
-
 //                {role && dashboardRoute[role] && <Link href={dashboardRoute[role]}>Dashboard</Link>}
 //             </nav>
 
@@ -74,7 +50,6 @@
 //                      Login
 //                   </Button>
 //                )}
-
 //                {!isLoading && data && (
 //                   <Button onClick={handleLogout} variant="destructive">
 //                      Logout
@@ -94,7 +69,7 @@ import { useGetMe, useLogoutHandler } from "@/hooks";
 import { UserRole } from "@/types";
 import Link from "next/link";
 
-const routes = [
+const publicRoutes = [
    { name: "Home", url: "/" },
    { name: "About us", url: "/about-us" },
 ];
@@ -111,33 +86,62 @@ export default function Header() {
 
    const role = data?.data?.role as UserRole | undefined;
 
+   const dashboardUrl = role ? dashboardRoute[role] : undefined;
+
    return (
-      <header className="h-16 w-full border-b">
-         <div className="mx-auto flex h-full max-w-7xl items-center justify-between">
+      <header className="h-16 w-full border-b bg-background">
+         <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-4">
+            {/* Logo */}
             <Link href="/" className="flex items-center gap-2">
                <Logo />
-               <span>University Management System</span>
+               <span className="font-semibold">University Management System</span>
             </Link>
 
-            <nav className="flex gap-5">
-               {routes.map((route) => (
-                  <Link key={route.url} href={route.url}>
+            {/* Navigation */}
+            <nav className="flex items-center gap-6">
+               {publicRoutes.map((route) => (
+                  <Link
+                     key={route.url}
+                     href={route.url}
+                     className="text-sm font-medium transition-colors hover:text-primary"
+                  >
                      {route.name}
                   </Link>
                ))}
-               {role && dashboardRoute[role] && <Link href={dashboardRoute[role]}>Dashboard</Link>}
+
+               {/* Show only when user is logged in */}
+               {dashboardUrl && (
+                  <Link
+                     href={dashboardUrl}
+                     className="text-sm font-medium transition-colors hover:text-primary"
+                  >
+                     Dashboard
+                  </Link>
+               )}
             </nav>
 
-            <div>
+            {/* Auth Actions */}
+            <div className="flex items-center gap-2">
                {!isLoading && !data && (
-                  <Button
-                     variant="outline"
-                     render={<Link href="/login">Login</Link>}
-                     nativeButton={false}
-                  >
-                     Login
-                  </Button>
+                  <>
+                     <Button
+                        variant="ghost"
+                        render={<Link href="/register" />}
+                        nativeButton={false}
+                     >
+                        Register
+                     </Button>
+
+                     <Button variant="outline" render={<Link href="/apply" />} nativeButton={false}>
+                        Apply as Instructor
+                     </Button>
+
+                     <Button render={<Link href="/login" />} nativeButton={false}>
+                        Login
+                     </Button>
+                  </>
                )}
+
                {!isLoading && data && (
                   <Button onClick={handleLogout} variant="destructive">
                      Logout
