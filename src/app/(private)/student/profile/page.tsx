@@ -92,11 +92,13 @@ export default function StudentProfilePage() {
                   </div>
                   <div className="grid grid-cols-2 gap-4 py-3">
                      <dt className="text-sm text-muted-foreground">Program</dt>
-                     <dd className="text-sm font-medium">{profile.program.name}</dd>
+                     <dd className="text-sm font-medium">{profile.program?.name ?? "-"}</dd>
                   </div>
                   <div className="grid grid-cols-2 gap-4 py-3">
                      <dt className="text-sm text-muted-foreground">Department</dt>
-                     <dd className="text-sm font-medium">{profile.program.department.name}</dd>
+                     <dd className="text-sm font-medium">
+                        {profile.program?.department.name ?? "-"}
+                     </dd>
                   </div>
                </dl>
             ) : (

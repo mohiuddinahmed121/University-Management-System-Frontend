@@ -1,3 +1,9 @@
+export interface IApiResponse<T> {
+   success: boolean;
+   message: string;
+   data: T;
+}
+
 export interface IDepartmentMini {
    id: string;
    name: string;
@@ -28,8 +34,8 @@ export interface IStudent {
    address?: string | null;
    dateOfBirth?: string | null;
    gender?: "MALE" | "FEMALE" | "OTHER" | null;
-   programId: string;
-   program: IProgramMini;
+   programId: string | null;
+   program: IProgramMini | null;
    user: IUserMini;
    createdAt: string;
    updatedAt: string;
@@ -38,7 +44,7 @@ export interface IStudent {
 export interface IUpdateStudentProfilePayload {
    address?: string;
    contactNumber?: string;
-   dateOfBirth?: Date;
+   dateOfBirth?: string;
    gender?: "MALE" | "FEMALE" | "OTHER";
 }
 

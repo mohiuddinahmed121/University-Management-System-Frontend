@@ -1,5 +1,6 @@
 import apiClient from "@/lib/apiClient";
 import type {
+   IApiResponse,
    IGetAllStudentsQuery,
    IGetAllStudentsResponse,
    IStudent,
@@ -12,17 +13,20 @@ export const getAllStudents = (query?: IGetAllStudentsQuery) => {
    });
 };
 
-export const getMyProfile = () => {
-   return apiClient<IStudent>("/student/my-profile");
+export const getMyProfile = async () => {
+   const res = await apiClient<IApiResponse<IStudent>>("/student/my-profile");
+   return res.data;
 };
 
-export const updateStudentProfile = (payload: IUpdateStudentProfilePayload) => {
-   return apiClient<IStudent>("/student/update-my-profile", {
+export const updateStudentProfile = async (payload: IUpdateStudentProfilePayload) => {
+   const res = await apiClient<IApiResponse<IStudent>>("/student/update-my-profile", {
       method: "PATCH",
       body: payload,
    });
+   return res.data;
 };
 
-export const getSingleStudentProfile = (studentId: string) => {
-   return apiClient<IStudent>(`/student/public/${studentId}`);
+export const getSingleStudentProfile = async (studentId: string) => {
+   const res = await apiClient<IApiResponse<IStudent>>(`/student/public/${studentId}`);
+   return res.data;
 };
