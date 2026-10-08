@@ -32,7 +32,6 @@ export interface IPayment {
 
 export interface ICreatePaymentPayload {
    semesterId: string;
-   amount: number;
 }
 
 export interface ICreatePaymentResponse {

@@ -31,6 +31,7 @@ export interface ICourse {
    prerequisites?: ICoursePrerequisite[];
    prerequisiteFor?: { id: string; course: ICourseLite }[];
    isDeleted: boolean;
+   sections?: ICourseSection[];
    createdAt: string;
    updatedAt: string;
 }
@@ -69,4 +70,25 @@ export interface IGetSingleCourseResponse {
 
 export interface ICreateCoursePrerequisitePayload {
    prerequisiteCourseId: string;
+}
+
+export interface ISectionInstructorLite {
+   id: string;
+   name?: string;
+}
+
+export interface ISectionSemesterLite {
+   id: string;
+   name: string;
+   year: number;
+}
+
+export interface ICourseSection {
+   id: string;
+   sectionName: string;
+   capacity: number;
+   availableSeats: number;
+   status: "OPEN" | "CLOSED" | "COMPLETED";
+   semester: ISectionSemesterLite;
+   instructor?: ISectionInstructorLite | null;
 }

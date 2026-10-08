@@ -26,15 +26,15 @@ export const studentRoutes = [
          },
       ],
    },
-   {
-      title: "Registration",
-      items: [
-         {
-            title: "Course Registration",
-            url: `${prefix}/registration`,
-         },
-      ],
-   },
+   // {
+   //    title: "Registration",
+   //    items: [
+   //       {
+   //          title: "Course Registration",
+   //          url: `${prefix}/registration`,
+   //       },
+   //    ],
+   // },
    {
       title: "Account",
       items: [

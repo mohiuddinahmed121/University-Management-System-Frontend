@@ -1,26 +1,61 @@
 "use client";
 
-import { useCreatePayment, useGetMyPayments } from "@/hooks";
-import { useState } from "react";
+import { toast } from "@/components/ui/toast";
+import {
+   useCreatePayment,
+   useGetAllSemesters,
+   useGetMyPayments,
+   useGetMyRegistrations,
+} from "@/hooks";
 
 export default function MyPaymentsPage() {
-   const { data, isLoading, isError } = useGetMyPayments();
-   const { mutate: pay, isPending } = useCreatePayment();
-
-   const [semesterId, setSemesterId] = useState("");
-   const [amount, setAmount] = useState("");
+   const { data, isLoading, isError } = useGetMyPayments({ limit: 100 });
+   const { data: semestersData } = useGetAllSemesters({ limit: 50 });
+   const { data: registrationsData } = useGetMyRegistrations({ limit: 100 });
+   const { mutate: pay, isPending, variables } = useCreatePayment();
 
    const payments = data?.data ?? [];
+   const semesters = semestersData?.data ?? [];
+   const registrations = registrationsData?.data ?? [];
 
-   const handlePay = (e: React.FormEvent) => {
-      e.preventDefault();
-      if (!semesterId || !amount) return;
+   // Semesters that are already paid
+   const paidSemesterIds = new Set(
+      payments.filter((p) => p.status === "PAID").map((p) => p.semesterId),
+   );
 
+   // semester key -> number of registered courses
+   const registeredCount = new Map<string, number>();
+   for (const reg of registrations) {
+      if (reg.status !== "REGISTERED") continue;
+
+      const sem = reg.section.semester as { id?: string; name: string; year?: number };
+      const key = sem.id ?? `${sem.name}-${sem.year}`;
+
+      registeredCount.set(key, (registeredCount.get(key) ?? 0) + 1);
+   }
+
+   // Only registered AND unpaid semesters are payable
+   const dues = semesters
+      .map((s) => ({
+         semester: s,
+         courseCount: registeredCount.get(s.id) ?? registeredCount.get(`${s.name}-${s.year}`) ?? 0,
+         isPaid: paidSemesterIds.has(s.id),
+      }))
+      .filter((d) => d.courseCount > 0 && !d.isPaid);
+
+   const handlePay = (semesterId: string) => {
       pay(
-         { semesterId, amount: Number(amount) },
+         { semesterId },
          {
             onSuccess: (res) => {
                window.location.href = res.bkashURL;
+            },
+            onError: (err) => {
+               toast.add({
+                  title: "Payment failed",
+                  description: err.message || "Could not start payment. Please try again.",
+                  type: "error",
+               });
             },
          },
       );
@@ -33,82 +68,107 @@ export default function MyPaymentsPage() {
    };
 
    return (
-      <div className="p-6">
-         <h1 className="mb-6 text-2xl font-semibold">My Payments</h1>
+      <div className="space-y-8 p-6">
+         <h1 className="text-2xl font-semibold">My Payments</h1>
 
-         <form
-            onSubmit={handlePay}
-            className="mb-6 flex flex-wrap items-end gap-3 rounded-md border p-4"
-         >
-            <div>
-               <label className="mb-1 block text-sm text-muted-foreground">Semester ID</label>
-               <input
-                  type="text"
-                  value={semesterId}
-                  onChange={(e) => setSemesterId(e.target.value)}
-                  placeholder="Semester ID"
-                  className="w-56 rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
-               />
-            </div>
-            <div>
-               <label className="mb-1 block text-sm text-muted-foreground">Amount (BDT)</label>
-               <input
-                  type="number"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                  placeholder="Amount"
-                  className="w-40 rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
-               />
-            </div>
-            <button
-               type="submit"
-               disabled={isPending}
-               className="rounded-md bg-primary px-4 py-2 text-sm text-white disabled:opacity-50"
-            >
-               {isPending ? "Redirecting..." : "Pay with bKash"}
-            </button>
-         </form>
+         <section>
+            <h2 className="mb-3 text-lg font-medium">Payable Semesters</h2>
 
-         {isLoading && <p className="text-sm text-muted-foreground">Loading payments...</p>}
-         {isError && <p className="text-sm text-red-500">Failed to load payments.</p>}
-
-         {!isLoading && !isError && (
-            <div className="overflow-x-auto rounded-md border">
-               <table className="w-full text-left text-sm">
-                  <thead className="bg-muted">
-                     <tr>
-                        <th className="px-4 py-3 font-medium">Invoice</th>
-                        <th className="px-4 py-3 font-medium">Semester</th>
-                        <th className="px-4 py-3 font-medium">Amount</th>
-                        <th className="px-4 py-3 font-medium">Status</th>
-                        <th className="px-4 py-3 font-medium">Paid At</th>
-                     </tr>
-                  </thead>
-                  <tbody>
-                     {payments.length === 0 && (
+            {dues.length === 0 ? (
+               <p className="rounded-md border px-4 py-6 text-center text-sm text-muted-foreground">
+                  No pending fees. Register for courses to see your fees here.
+               </p>
+            ) : (
+               <div className="overflow-x-auto rounded-md border">
+                  <table className="w-full text-left text-sm">
+                     <thead className="bg-muted">
                         <tr>
-                           <td colSpan={5} className="px-4 py-6 text-center text-muted-foreground">
-                              No payments yet.
-                           </td>
+                           <th className="px-4 py-3 font-medium">Semester</th>
+                           <th className="px-4 py-3 font-medium">Registered Courses</th>
+                           <th className="px-4 py-3 font-medium">Fee</th>
+                           <th className="px-4 py-3 font-medium">Action</th>
                         </tr>
-                     )}
-                     {payments.map((payment) => (
-                        <tr key={payment.id} className="border-t">
-                           <td className="px-4 py-3">{payment.merchantInvoiceNumber}</td>
-                           <td className="px-4 py-3">{payment.semester.name}</td>
-                           <td className="px-4 py-3">৳{payment.amount}</td>
-                           <td className={`px-4 py-3 font-medium ${statusColor(payment.status)}`}>
-                              {payment.status}
-                           </td>
-                           <td className="px-4 py-3">
-                              {payment.paidAt ? new Date(payment.paidAt).toLocaleDateString() : "-"}
-                           </td>
+                     </thead>
+                     <tbody>
+                        {dues.map(({ semester, courseCount }) => (
+                           <tr key={semester.id} className="border-t">
+                              <td className="px-4 py-3">
+                                 {semester.name} {semester.year}
+                              </td>
+                              <td className="px-4 py-3">{courseCount}</td>
+                              <td className="px-4 py-3">৳{semester.feeAmount}</td>
+                              <td className="px-4 py-3">
+                                 <button
+                                    onClick={() => handlePay(semester.id)}
+                                    disabled={isPending}
+                                    className="rounded-md bg-primary px-3 py-1.5 text-xs text-white disabled:opacity-50"
+                                 >
+                                    {isPending && variables?.semesterId === semester.id
+                                       ? "Redirecting..."
+                                       : "Pay with bKash"}
+                                 </button>
+                              </td>
+                           </tr>
+                        ))}
+                     </tbody>
+                  </table>
+               </div>
+            )}
+         </section>
+
+         <section>
+            <h2 className="mb-3 text-lg font-medium">Payment History</h2>
+
+            {isLoading && <p className="text-sm text-muted-foreground">Loading payments...</p>}
+            {isError && <p className="text-sm text-red-500">Failed to load payments.</p>}
+
+            {!isLoading && !isError && (
+               <div className="overflow-x-auto rounded-md border">
+                  <table className="w-full text-left text-sm">
+                     <thead className="bg-muted">
+                        <tr>
+                           <th className="px-4 py-3 font-medium">Invoice</th>
+                           <th className="px-4 py-3 font-medium">Semester</th>
+                           <th className="px-4 py-3 font-medium">Amount</th>
+                           <th className="px-4 py-3 font-medium">Status</th>
+                           <th className="px-4 py-3 font-medium">Paid At</th>
                         </tr>
-                     ))}
-                  </tbody>
-               </table>
-            </div>
-         )}
+                     </thead>
+                     <tbody>
+                        {payments.length === 0 && (
+                           <tr>
+                              <td
+                                 colSpan={5}
+                                 className="px-4 py-6 text-center text-muted-foreground"
+                              >
+                                 No payments yet.
+                              </td>
+                           </tr>
+                        )}
+                        {payments.map((payment) => (
+                           <tr key={payment.id} className="border-t">
+                              <td className="px-4 py-3">{payment.merchantInvoiceNumber}</td>
+                              <td className="px-4 py-3">
+                                 {payment.semester.name} {payment.semester.year}
+                              </td>
+                              <td className="px-4 py-3">৳{payment.amount}</td>
+                              <td
+                                 className={`px-4 py-3 font-medium ${statusColor(payment.status)}`}
+                              >
+                                 {payment.status}
+                              </td>
+                              <td className="px-4 py-3">
+                                 {payment.paidAt
+                                    ? new Date(payment.paidAt).toLocaleDateString()
+                                    : "-"}
+                              </td>
+                           </tr>
+                        ))}
+                     </tbody>
+                  </table>
+               </div>
+            )}
+         </section>
       </div>
    );
 }
