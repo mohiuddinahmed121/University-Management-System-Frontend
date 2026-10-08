@@ -2,6 +2,7 @@ import apiClient from "@/lib/apiClient";
 import type {
    IGetAllResultsQuery,
    IGetAllResultsResponse,
+   IGetMyResultsResponse,
    IResult,
    ISubmitResultPayload,
    IUpdateResultPayload,
@@ -28,7 +29,7 @@ export const updateResult = ({
 };
 
 export const getMyResults = () => {
-   return apiClient<IResult[]>("/result/my-results");
+   return apiClient<IGetMyResultsResponse>("/result/my-results");
 };
 
 export const getAllResults = (query?: IGetAllResultsQuery) => {

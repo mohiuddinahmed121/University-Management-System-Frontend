@@ -76,3 +76,9 @@ export interface IGetAllResultsResponse {
    data: IResult[];
    meta: IResultsMeta;
 }
+
+export interface IGetMyResultsResponse {
+   success: boolean;
+   message: string;
+   data: IResult[];
+}
