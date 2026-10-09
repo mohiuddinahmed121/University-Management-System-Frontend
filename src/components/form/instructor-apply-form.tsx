@@ -23,10 +23,17 @@ import { InstructorApplicationData } from "@/types";
 import { useApplyAsInstructor } from "@/hooks/instructor.hook";
 import { toast } from "../ui/toast";
 import { Spinner } from "@/components/ui/spinner";
+import { useGetAllDepartments } from "@/hooks";
 
 export default function InstructorApplyForm() {
    const router = useRouter();
    const { mutate: apply, isPending: applyPending } = useApplyAsInstructor();
+
+   const { data: departmentsData, isLoading: departmentsLoading } = useGetAllDepartments({
+      limit: 100,
+   });
+
+   const departments = departmentsData?.data ?? [];
 
    const form = useForm({
       defaultValues: {
@@ -295,20 +302,34 @@ export default function InstructorApplyForm() {
                      return (
                         <Field data-invalid={isInvalid}>
                            <FieldLabel htmlFor={field.name}>Department</FieldLabel>
+
                            <div className="relative">
                               <Building2 className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-                              <Input
+
+                              <select
                                  id={field.name}
                                  name={field.name}
-                                 type="text"
-                                 placeholder="Department ID"
                                  value={field.state.value}
                                  onBlur={field.handleBlur}
                                  onChange={(e) => field.handleChange(e.target.value)}
                                  aria-invalid={isInvalid}
-                                 className="pl-9"
-                              />
+                                 disabled={departmentsLoading}
+                                 className="flex h-9 w-full rounded-md border bg-transparent py-1 pl-9 pr-3 text-sm shadow-xs outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50"
+                              >
+                                 <option value="">
+                                    {departmentsLoading
+                                       ? "Loading departments..."
+                                       : "Select your department"}
+                                 </option>
+
+                                 {departments.map((department) => (
+                                    <option key={department.id} value={department.id}>
+                                       {department.name} ({department.code})
+                                    </option>
+                                 ))}
+                              </select>
                            </div>
+
                            {isInvalid && <FieldError errors={field.state.meta.errors} />}
                         </Field>
                      );
