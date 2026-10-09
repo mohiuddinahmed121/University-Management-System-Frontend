@@ -9,6 +9,7 @@ import {
    useCreateSection,
    useDeleteSection,
    useGetAllCourses,
+   useGetAllInstructors,
    useGetAllSections,
    useGetAllSemesters,
 } from "@/hooks";
@@ -35,6 +36,7 @@ export default function AdminSectionsPage() {
    });
    const { data: courseData } = useGetAllCourses({ limit: 100 });
    const { data: semesterData } = useGetAllSemesters({ limit: 100 });
+   const { data: instructorData } = useGetAllInstructors({ limit: 100 });
    const { mutate: createSection, isPending: isCreating } = useCreateSection();
    const { mutate: closeSection } = useCloseSection();
    const { mutate: deleteSection } = useDeleteSection();
@@ -42,6 +44,9 @@ export default function AdminSectionsPage() {
    const sections = data?.data ?? [];
    const courses = courseData?.data ?? [];
    const semesters = semesterData?.data ?? [];
+   const approvedInstructors = (instructorData?.data ?? []).filter(
+      (i) => i.verificationStatus === "APPROVED",
+   );
 
    const handleCreate = () => {
       createSection(
@@ -174,12 +179,19 @@ export default function AdminSectionsPage() {
                   </select>
                </Field>
                <Field className="sm:col-span-2">
-                  <FieldLabel>Instructor ID (optional)</FieldLabel>
-                  <Input
+                  <FieldLabel>Instructor (optional)</FieldLabel>
+                  <select
                      value={form.instructorId}
                      onChange={(e) => setForm({ ...form, instructorId: e.target.value })}
-                     placeholder="পরে Instructor list থেকে assign করতে পারেন"
-                  />
+                     className="w-full rounded-md border px-3 py-2 text-sm"
+                  >
+                     <option value="">Unassigned</option>
+                     {approvedInstructors.map((i) => (
+                        <option key={i.id} value={i.id}>
+                           {i.name} ({i.instructorId}) — {i.department?.name}
+                        </option>
+                     ))}
+                  </select>
                </Field>
                <div className="sm:col-span-2">
                   <Button onClick={handleCreate} disabled={isCreating}>

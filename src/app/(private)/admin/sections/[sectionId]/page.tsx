@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/toast";
-import { useGetSingleSection, useUpdateSection } from "@/hooks";
+import { useGetAllInstructors, useGetSingleSection, useUpdateSection } from "@/hooks";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -14,9 +14,13 @@ export default function AdminSingleSectionPage() {
    const sectionId = params.sectionId;
 
    const { data, isLoading } = useGetSingleSection(sectionId);
+   const { data: instructorData } = useGetAllInstructors({ limit: 100 });
    const { mutate: updateSection, isPending } = useUpdateSection();
 
    const section = data?.data;
+   const approvedInstructors = (instructorData?.data ?? []).filter(
+      (i) => i.verificationStatus === "APPROVED",
+   );
 
    const [form, setForm] = useState({ capacity: "", instructorId: "" });
 
@@ -73,12 +77,20 @@ export default function AdminSingleSectionPage() {
                   />
                </Field>
                <Field>
-                  <FieldLabel>Instructor ID</FieldLabel>
-                  <Input
+                  <FieldLabel>Instructor</FieldLabel>
+                  <select
                      value={form.instructorId}
                      disabled={section.status !== "OPEN"}
                      onChange={(e) => setForm({ ...form, instructorId: e.target.value })}
-                  />
+                     className="w-full rounded-md border px-3 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                     <option value="">Unassigned</option>
+                     {approvedInstructors.map((i) => (
+                        <option key={i.id} value={i.id}>
+                           {i.name} ({i.instructorId}) — {i.department?.name}
+                        </option>
+                     ))}
+                  </select>
                </Field>
 
                {section.status === "OPEN" && (

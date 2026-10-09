@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useGetMySections } from "@/hooks";
 import { Spinner } from "@/components/ui/spinner";
 
@@ -93,7 +94,12 @@ export default function MySectionsPage() {
                                           {reg.student.studentId}
                                        </td>
                                        <td className="px-3 py-2 whitespace-nowrap">
-                                          {reg.student.name}
+                                          <Link
+                                             href={`/instructor/registrations/${reg.id}`}
+                                             className="font-medium text-primary underline underline-offset-4"
+                                          >
+                                             {reg.student.name}
+                                          </Link>
                                        </td>
                                     </tr>
                                  ))}

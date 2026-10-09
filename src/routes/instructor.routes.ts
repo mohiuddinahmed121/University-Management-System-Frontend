@@ -19,15 +19,6 @@ export const instructorRoutes = [
       ],
    },
    {
-      title: "Academic",
-      items: [
-         {
-            title: "Results",
-            url: `${prefix}/results`,
-         },
-      ],
-   },
-   {
       title: "Account",
       items: [
          {

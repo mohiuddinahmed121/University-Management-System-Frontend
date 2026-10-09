@@ -41,9 +41,9 @@ export interface IRegistrationMini {
 export interface IResult {
    id: string;
    registrationId: string;
-   marks: number;
    grade: string;
-   gradePoint: number;
+   marks: number | string;
+   gradePoint: number | string | null;
    submittedAt: string;
    createdAt: string;
    updatedAt: string;
@@ -81,4 +81,10 @@ export interface IGetMyResultsResponse {
    success: boolean;
    message: string;
    data: IResult[];
+}
+
+export interface IGetSingleResultResponse {
+   success: boolean;
+   message: string;
+   data: IResult;
 }

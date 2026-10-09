@@ -19,10 +19,18 @@ export interface IRegistrationStudent {
    email: string;
 }
 
+// export interface IRegistrationResult {
+//    id: string;
+//    grade?: string | null;
+//    gpa?: number | null;
+// }
+
 export interface IRegistrationResult {
    id: string;
-   grade?: string | null;
-   gpa?: number | null;
+   marks: number;
+   grade: string;
+   gradePoint: number;
+   submittedAt: string;
 }
 
 export interface IRegistration {

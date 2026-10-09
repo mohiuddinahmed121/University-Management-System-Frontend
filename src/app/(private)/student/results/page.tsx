@@ -46,7 +46,11 @@ export default function MyResultsPage() {
                            </td>
                            <td className="px-4 py-3">{result.marks}</td>
                            <td className="px-4 py-3 font-medium">{result.grade}</td>
-                           <td className="px-4 py-3">{result.gradePoint.toFixed(2)}</td>
+                           <td className="px-4 py-3">
+                              {result.gradePoint != null
+                                 ? Number(result.gradePoint).toFixed(2)
+                                 : "-"}
+                           </td>
                         </tr>
                      ))}
                   </tbody>
