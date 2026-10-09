@@ -4,6 +4,10 @@ import type {
    IApiResponse,
    IInstructorPublicProfile,
    IUpdateInstructorProfilePayload,
+   IGetAllInstructorsQuery,
+   IGetAllInstructorsResponse,
+   IApproveInstructorPayload,
+   IApproveInstructorResult,
 } from "@/types";
 
 export function applyAsInstructor(payload: InstructorApplicationPayload) {
@@ -36,6 +40,26 @@ export const updateMyInstructorProfile = async (payload: IUpdateInstructorProfil
       "/instructor/update-my-profile",
       {
          method: "PATCH",
+         body: payload,
+      },
+   );
+   return res.data;
+};
+
+/* ---------- Admin: Instructor Applications ---------- */
+
+export const getAllInstructors = async (query?: IGetAllInstructorsQuery) => {
+   return apiClient<IGetAllInstructorsResponse>("/instructor/all-instructors", {
+      method: "GET",
+      query,
+   });
+};
+
+export const approveInstructor = async (payload: IApproveInstructorPayload) => {
+   const res = await apiClient<IApiResponse<IApproveInstructorResult>>(
+      "/instructor/approve-instructor",
+      {
+         method: "POST",
          body: payload,
       },
    );

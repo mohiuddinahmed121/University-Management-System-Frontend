@@ -1,6 +1,11 @@
-import { applyAsInstructor, verifyInstructorEmail } from "@/api/instructor.api";
+import {
+   applyAsInstructor,
+   verifyInstructorEmail,
+   getAllInstructors,
+   approveInstructor,
+} from "@/api/instructor.api";
 import { getInstructorPublicProfile, getMe, updateMyInstructorProfile } from "@/api";
-import type { IInstructorUser } from "@/types";
+import type { IInstructorUser, IGetAllInstructorsQuery } from "@/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export function useApplyAsInstructor() {
@@ -39,6 +44,26 @@ export function useUpdateMyInstructorProfile() {
       onSuccess: () => {
          queryClient.invalidateQueries({ queryKey: ["user"] });
          queryClient.invalidateQueries({ queryKey: ["instructor-public"] });
+      },
+   });
+}
+
+/* ---------- Admin: Instructor Applications ---------- */
+
+export function useGetAllInstructors(query?: IGetAllInstructorsQuery) {
+   return useQuery({
+      queryKey: ["admin-instructors", query],
+      queryFn: () => getAllInstructors(query),
+   });
+}
+
+export function useApproveInstructor() {
+   const queryClient = useQueryClient();
+
+   return useMutation({
+      mutationFn: approveInstructor,
+      onSuccess: () => {
+         queryClient.invalidateQueries({ queryKey: ["admin-instructors"] });
       },
    });
 }
