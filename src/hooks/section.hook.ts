@@ -3,10 +3,11 @@ import {
    createSection,
    deleteSection,
    getAllSections,
+   getMySections,
    getSectionById,
    updateSection,
 } from "@/api";
-import type { IGetAllSectionsQuery } from "@/types";
+import type { IGetAllSectionsQuery, IGetMySectionsQuery } from "@/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export function useGetAllSections(query?: IGetAllSectionsQuery) {
@@ -63,5 +64,12 @@ export function useDeleteSection() {
       onSuccess: () => {
          queryClient.invalidateQueries({ queryKey: ["sections"] });
       },
+   });
+}
+
+export function useGetMySections(query?: IGetMySectionsQuery) {
+   return useQuery({
+      queryKey: ["my-sections", query],
+      queryFn: () => getMySections(query),
    });
 }

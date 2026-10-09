@@ -3,6 +3,8 @@ import type {
    ICreateSectionPayload,
    IGetAllSectionsQuery,
    IGetAllSectionsResponse,
+   IGetMySectionsQuery,
+   IGetMySectionsResponse,
    IGetSingleSectionResponse,
    IUpdateSectionPayload,
 } from "@/types";
@@ -43,4 +45,8 @@ export function closeSection(sectionId: string) {
 
 export function deleteSection(sectionId: string) {
    return apiClient(`/section/${sectionId}`, { method: "DELETE" });
+}
+
+export function getMySections(query?: IGetMySectionsQuery) {
+   return apiClient<IGetMySectionsResponse>("/section/my-sections", { params: query });
 }

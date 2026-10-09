@@ -27,4 +27,13 @@ export const instructorRoutes = [
          },
       ],
    },
+   {
+      title: "Account",
+      items: [
+         {
+            title: "My Profile",
+            url: `${prefix}/profile`,
+         },
+      ],
+   },
 ];

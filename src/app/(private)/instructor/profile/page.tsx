@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { toast } from "@/components/ui/toast";
 import { useInstructorPublicProfile, useMyInstructor, useUpdateMyInstructorProfile } from "@/hooks";
 
@@ -29,7 +29,7 @@ export default function InstructorProfilePage() {
       }
    }, [instructor]);
 
-   const handleSubmit = (e: React.FormEvent) => {
+   const handleSubmit = (e: FormEvent) => {
       e.preventDefault();
 
       updateProfile(

@@ -85,3 +85,25 @@ export interface IGetSingleSectionResponse {
    message: string;
    data: ISectionDetail;
 }
+
+/* ---------- Instructor: My Sections ---------- */
+
+export interface IGetMySectionsQuery {
+   page?: number;
+   limit?: number;
+   status?: SectionStatus;
+   semesterId?: string;
+   sortBy?: string;
+   sortOrder?: "asc" | "desc";
+}
+
+export interface IMySection extends ISection {
+   registrations: ISectionRegistration[];
+}
+
+export interface IGetMySectionsResponse {
+   success: boolean;
+   message: string;
+   data: IMySection[];
+   meta: IMeta;
+}
