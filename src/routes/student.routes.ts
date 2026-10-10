@@ -20,21 +20,8 @@ export const studentRoutes = [
             title: "Results",
             url: `${prefix}/results`,
          },
-         // {
-         //    title: "Transcript",
-         //    url: `${prefix}/transcript`,
-         // },
       ],
    },
-   // {
-   //    title: "Registration",
-   //    items: [
-   //       {
-   //          title: "Course Registration",
-   //          url: `${prefix}/registration`,
-   //       },
-   //    ],
-   // },
    {
       title: "Account",
       items: [

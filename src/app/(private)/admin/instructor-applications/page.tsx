@@ -209,7 +209,6 @@ export default function InstructorApplicationsPage() {
                                  <div className="flex items-center gap-2">
                                     <div className="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-muted text-xs font-medium">
                                        {instructor.user?.imageUrl ? (
-                                          // eslint-disable-next-line @next/next/no-img-element
                                           <img
                                              src={instructor.user.imageUrl}
                                              alt={instructor.name}

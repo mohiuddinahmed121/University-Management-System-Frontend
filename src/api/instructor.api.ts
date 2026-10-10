@@ -46,8 +46,6 @@ export const updateMyInstructorProfile = async (payload: IUpdateInstructorProfil
    return res.data;
 };
 
-/* ---------- Admin: Instructor Applications ---------- */
-
 export const getAllInstructors = async (query?: IGetAllInstructorsQuery) => {
    return apiClient<IGetAllInstructorsResponse>("/instructor/all-instructors", {
       method: "GET",

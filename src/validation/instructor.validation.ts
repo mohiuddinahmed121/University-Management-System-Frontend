@@ -26,7 +26,6 @@ export const getCustomFileSchema = <T>(message: string) =>
       { message },
    );
 
-// matches IApplyAsInstructorPayload exactly
 export const applyAsInstructorSchema = z.object({
    user: z.object({
       name: z.string().trim().min(2, "Full name must be at least 2 characters long"),
@@ -67,7 +66,6 @@ export const instructorApplyFormSchema = z.object({
    }),
 });
 
-// matches IUpdateInstructorProfilePayload — identical to your backend's own schema
 export const updateInstructorProfileSchema = z.object({
    address: z.string().trim().min(5, "Address must be at least 5 characters long").optional(),
    specialization: z

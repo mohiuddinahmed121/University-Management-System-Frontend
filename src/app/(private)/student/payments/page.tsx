@@ -18,12 +18,10 @@ export default function MyPaymentsPage() {
    const semesters = semestersData?.data ?? [];
    const registrations = registrationsData?.data ?? [];
 
-   // Semesters that are already paid
    const paidSemesterIds = new Set(
       payments.filter((p) => p.status === "PAID").map((p) => p.semesterId),
    );
 
-   // semester key -> number of registered courses
    const registeredCount = new Map<string, number>();
    for (const reg of registrations) {
       if (reg.status !== "REGISTERED") continue;
@@ -34,7 +32,6 @@ export default function MyPaymentsPage() {
       registeredCount.set(key, (registeredCount.get(key) ?? 0) + 1);
    }
 
-   // Only registered AND unpaid semesters are payable
    const dues = semesters
       .map((s) => ({
          semester: s,

@@ -51,8 +51,6 @@ export interface IUpdateInstructorProfilePayload {
    contactNumber?: string;
 }
 
-/* ---------- Admin: Instructor Applications ---------- */
-
 export interface IInstructorListUser {
    id: string;
    name: string;
@@ -68,10 +66,9 @@ export interface IInstructorListDepartment {
    code: string;
 }
 
-// One row returned by GET /instructor/all-instructors (admin only)
 export interface IAdminInstructorListItem {
-   id: string; // <-- Instructor row's own id. This is what approveInstructor needs, NOT instructorId code.
-   instructorId: string; // human readable code, e.g. INS-2026-0001 (display only)
+   id: string;
+   instructorId: string;
    name: string;
    email: string;
    address?: string | null;
@@ -111,8 +108,6 @@ export interface IGetAllInstructorsResponse {
    };
 }
 
-// NOTE: instructorId here = the Instructor row's `id` (cuid), confirmed from
-// instructor.service.ts -> prisma.instructor.findUnique({ where: { id: instructorId } })
 export interface IApproveInstructorPayload {
    instructorId: string;
    action: "APPROVE" | "REJECT";

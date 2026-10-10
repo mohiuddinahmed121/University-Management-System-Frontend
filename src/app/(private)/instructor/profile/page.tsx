@@ -133,7 +133,6 @@ export default function InstructorProfilePage() {
          <div className="mb-4 flex max-w-xl items-center gap-4 rounded-md border p-6">
             <div className="relative flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary text-lg font-semibold text-white">
                {me?.imageUrl ? (
-                  // eslint-disable-next-line @next/next/no-img-element
                   <img src={me.imageUrl} alt={instructor.name} className="size-full object-cover" />
                ) : (
                   getInitials(instructor.name)

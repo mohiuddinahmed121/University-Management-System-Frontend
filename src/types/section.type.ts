@@ -21,11 +21,6 @@ export interface ISectionStudent {
    studentId: string;
 }
 
-// export interface ISectionRegistration {
-//    id: string;
-//    student: ISectionStudent;
-// }
-
 export interface ISectionRegistrationResult {
    id: string;
    marks: number;
@@ -100,8 +95,6 @@ export interface IGetSingleSectionResponse {
    message: string;
    data: ISectionDetail;
 }
-
-/* ---------- Instructor: My Sections ---------- */
 
 export interface IGetMySectionsQuery {
    page?: number;

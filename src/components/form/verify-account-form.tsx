@@ -91,8 +91,6 @@ export default function VerifyAccountForm({
          }
 
          try {
-            // Backend sets the auth cookies during verify-email as well.
-            // Fetch the authenticated user's role and redirect accordingly.
             const response = await getMe();
 
             queryClient.setQueryData(["user"], response);

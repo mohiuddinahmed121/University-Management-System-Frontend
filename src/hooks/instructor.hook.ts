@@ -48,8 +48,6 @@ export function useUpdateMyInstructorProfile() {
    });
 }
 
-/* ---------- Admin: Instructor Applications ---------- */
-
 export function useGetAllInstructors(query?: IGetAllInstructorsQuery) {
    return useQuery({
       queryKey: ["admin-instructors", query],

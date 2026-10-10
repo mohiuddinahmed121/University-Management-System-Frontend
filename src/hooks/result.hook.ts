@@ -24,28 +24,6 @@ export function useGetSingleResult(resultId: string) {
    });
 }
 
-// export function useSubmitResult() {
-//    const queryClient = useQueryClient();
-//    return useMutation({
-//       mutationFn: submitResult,
-//       onSuccess: () => {
-//          queryClient.invalidateQueries({ queryKey: ["all-results"] });
-//          queryClient.invalidateQueries({ queryKey: ["all-registrations"] });
-//       },
-//    });
-// }
-
-// export function useUpdateResult() {
-//    const queryClient = useQueryClient();
-//    return useMutation({
-//       mutationFn: updateResult,
-//       onSuccess: () => {
-//          queryClient.invalidateQueries({ queryKey: ["all-results"] });
-//          queryClient.invalidateQueries({ queryKey: ["result"] });
-//       },
-//    });
-// }
-
 export function useSubmitResult() {
    const queryClient = useQueryClient();
    return useMutation({

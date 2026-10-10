@@ -28,7 +28,6 @@ export function DashboardSidebar({ role }: { role: UserRole }) {
    const routes: SidebarItems = sidebarRoutes[role] || [];
 
    return (
-      // Header-er height (h-16 = 4rem) er niche theke shuru
       <Sidebar className="top-16 h-[calc(100svh-4rem)]">
          <SidebarContent>
             {routes.map((group) => (

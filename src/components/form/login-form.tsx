@@ -49,8 +49,6 @@ export default function LoginForm() {
             {
                onSuccess: async () => {
                   try {
-                     // Backend sets the auth cookies during login.
-                     // Fetch the authenticated user's role from /auth/me.
                      const response = await getMe();
 
                      queryClient.setQueryData(["user"], response);

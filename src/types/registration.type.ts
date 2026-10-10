@@ -19,12 +19,6 @@ export interface IRegistrationStudent {
    email: string;
 }
 
-// export interface IRegistrationResult {
-//    id: string;
-//    grade?: string | null;
-//    gpa?: number | null;
-// }
-
 export interface IRegistrationResult {
    id: string;
    marks: number;

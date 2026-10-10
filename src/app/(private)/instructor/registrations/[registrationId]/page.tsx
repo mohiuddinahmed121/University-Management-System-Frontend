@@ -145,7 +145,6 @@ export default function RegistrationDetailPage() {
             </Button>
          </div>
 
-         {/* Student profile header */}
          <div className="flex flex-wrap items-center gap-4 rounded-lg border p-5">
             <div className="flex size-14 shrink-0 items-center justify-center rounded-full bg-primary text-lg font-semibold text-primary-foreground">
                {getInitials(studentName)}
@@ -165,12 +164,10 @@ export default function RegistrationDetailPage() {
             </span>
          </div>
 
-         {/* Academic record / history timeline */}
          <div className="rounded-lg border p-5">
             <h2 className="mb-4 font-semibold">Academic Record</h2>
 
             <div className="flex flex-col gap-4 border-l-2 border-muted pl-4">
-               {/* Course/Section */}
                <div className="relative">
                   <span className="absolute -left-[21px] top-1 size-2.5 rounded-full bg-primary" />
                   <p className="text-sm font-medium">
@@ -182,7 +179,6 @@ export default function RegistrationDetailPage() {
                   </p>
                </div>
 
-               {/* Registered */}
                <div className="relative">
                   <span className="absolute -left-[21px] top-1 size-2.5 rounded-full bg-green-500" />
                   <p className="text-sm font-medium">Registered</p>
@@ -195,7 +191,6 @@ export default function RegistrationDetailPage() {
                   </p>
                </div>
 
-               {/* Dropped */}
                {registration.droppedAt && (
                   <div className="relative">
                      <span className="absolute -left-[21px] top-1 size-2.5 rounded-full bg-red-500" />
@@ -210,7 +205,6 @@ export default function RegistrationDetailPage() {
                   </div>
                )}
 
-               {/* Result */}
                {registration.result && (
                   <div className="relative">
                      <span className="absolute -left-[21px] top-1 size-2.5 rounded-full bg-blue-500" />
@@ -227,7 +221,6 @@ export default function RegistrationDetailPage() {
             </div>
          </div>
 
-         {/* Result detail + submit/update form */}
          <div className="rounded-lg border p-5">
             <h2 className="mb-4 font-semibold">Result</h2>
 

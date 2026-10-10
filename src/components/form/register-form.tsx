@@ -20,7 +20,6 @@ export function RegisterForm() {
    const [showPassword, setShowPassword] = useState(false);
    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-   // Hook called at the top level of the component — not inside form.Field
    const { data: programsData } = useGetAllPrograms({ limit: 100 });
    const programs = programsData?.data ?? [];
 
