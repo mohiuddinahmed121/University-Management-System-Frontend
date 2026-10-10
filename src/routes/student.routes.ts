@@ -20,10 +20,10 @@ export const studentRoutes = [
             title: "Results",
             url: `${prefix}/results`,
          },
-         {
-            title: "Transcript",
-            url: `${prefix}/transcript`,
-         },
+         // {
+         //    title: "Transcript",
+         //    url: `${prefix}/transcript`,
+         // },
       ],
    },
    // {

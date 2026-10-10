@@ -12,3 +12,4 @@ export * from "./registration.hook";
 export * from "./result.hook";
 export * from "./student.hook";
 export * from "./payment.hook";
+export * from "./user.hook";

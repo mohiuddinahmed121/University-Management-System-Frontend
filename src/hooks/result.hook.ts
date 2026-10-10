@@ -24,13 +24,37 @@ export function useGetSingleResult(resultId: string) {
    });
 }
 
+// export function useSubmitResult() {
+//    const queryClient = useQueryClient();
+//    return useMutation({
+//       mutationFn: submitResult,
+//       onSuccess: () => {
+//          queryClient.invalidateQueries({ queryKey: ["all-results"] });
+//          queryClient.invalidateQueries({ queryKey: ["all-registrations"] });
+//       },
+//    });
+// }
+
+// export function useUpdateResult() {
+//    const queryClient = useQueryClient();
+//    return useMutation({
+//       mutationFn: updateResult,
+//       onSuccess: () => {
+//          queryClient.invalidateQueries({ queryKey: ["all-results"] });
+//          queryClient.invalidateQueries({ queryKey: ["result"] });
+//       },
+//    });
+// }
+
 export function useSubmitResult() {
    const queryClient = useQueryClient();
    return useMutation({
       mutationFn: submitResult,
-      onSuccess: () => {
+      onSuccess: (data, variables) => {
          queryClient.invalidateQueries({ queryKey: ["all-results"] });
          queryClient.invalidateQueries({ queryKey: ["all-registrations"] });
+         queryClient.invalidateQueries({ queryKey: ["registration", variables.registrationId] });
+         queryClient.invalidateQueries({ queryKey: ["my-sections"] });
       },
    });
 }
@@ -39,9 +63,10 @@ export function useUpdateResult() {
    const queryClient = useQueryClient();
    return useMutation({
       mutationFn: updateResult,
-      onSuccess: () => {
+      onSuccess: (data) => {
          queryClient.invalidateQueries({ queryKey: ["all-results"] });
          queryClient.invalidateQueries({ queryKey: ["result"] });
+         queryClient.invalidateQueries({ queryKey: ["registration", data.registration.id] });
       },
    });
 }

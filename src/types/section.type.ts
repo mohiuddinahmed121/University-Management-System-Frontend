@@ -21,9 +21,24 @@ export interface ISectionStudent {
    studentId: string;
 }
 
+// export interface ISectionRegistration {
+//    id: string;
+//    student: ISectionStudent;
+// }
+
+export interface ISectionRegistrationResult {
+   id: string;
+   marks: number;
+   grade: string;
+   gradePoint: number | string | null;
+   submittedAt: string;
+}
+
 export interface ISectionRegistration {
    id: string;
+   status: "REGISTERED" | "COMPLETED" | "DROPPED";
    student: ISectionStudent;
+   result?: ISectionRegistrationResult | null;
 }
 
 export interface ISection {

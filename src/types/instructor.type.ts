@@ -36,6 +36,7 @@ export interface IInstructorUser {
    name: string;
    email: string;
    role: string;
+   imageUrl?: string | null;
    instructor: IInstructorProfile | null;
 }
 

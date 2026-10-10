@@ -16,6 +16,14 @@ const statusBadgeClass: Record<string, string> = {
    REJECTED: "bg-red-100 text-red-800",
 };
 
+const getInitials = (name: string) =>
+   name
+      .split(" ")
+      .map((p) => p[0])
+      .join("")
+      .slice(0, 2)
+      .toUpperCase();
+
 export default function InstructorApplicationsPage() {
    const [searchTerm, setSearchTerm] = useState("");
    const [statusFilter, setStatusFilter] = useState<StatusFilter>("PENDING");
@@ -197,7 +205,23 @@ export default function InstructorApplicationsPage() {
                               <td className="px-3 py-2.5 whitespace-nowrap">
                                  {instructor.instructorId}
                               </td>
-                              <td className="px-3 py-2.5 whitespace-nowrap">{instructor.name}</td>
+                              <td className="px-3 py-2.5 whitespace-nowrap">
+                                 <div className="flex items-center gap-2">
+                                    <div className="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-muted text-xs font-medium">
+                                       {instructor.user?.imageUrl ? (
+                                          // eslint-disable-next-line @next/next/no-img-element
+                                          <img
+                                             src={instructor.user.imageUrl}
+                                             alt={instructor.name}
+                                             className="size-full object-cover"
+                                          />
+                                       ) : (
+                                          getInitials(instructor.name)
+                                       )}
+                                    </div>
+                                    {instructor.name}
+                                 </div>
+                              </td>
                               <td className="px-3 py-2.5 whitespace-nowrap">{instructor.email}</td>
                               <td className="px-3 py-2.5 whitespace-nowrap">
                                  {instructor.department

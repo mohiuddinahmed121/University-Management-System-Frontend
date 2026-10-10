@@ -155,9 +155,9 @@ export default function LoginForm() {
                                  aria-label={showPassword ? "Hide password" : "Show password"}
                               >
                                  {showPassword ? (
-                                    <EyeClosed className="size-4" />
-                                 ) : (
                                     <Eye className="size-4" />
+                                 ) : (
+                                    <EyeClosed className="size-4" />
                                  )}
                               </button>
                            </div>

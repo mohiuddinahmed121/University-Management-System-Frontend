@@ -85,6 +85,8 @@ export default function MySectionsPage() {
                                  <tr className="text-left">
                                     <th className="px-3 py-2 font-medium">Student ID</th>
                                     <th className="px-3 py-2 font-medium">Name</th>
+                                    <th className="px-3 py-2 font-medium">Status</th>
+                                    <th className="px-3 py-2 font-medium">Grade</th>
                                  </tr>
                               </thead>
                               <tbody>
@@ -100,6 +102,22 @@ export default function MySectionsPage() {
                                           >
                                              {reg.student.name}
                                           </Link>
+                                       </td>
+                                       <td className="px-3 py-2 whitespace-nowrap">
+                                          <span
+                                             className={`rounded-full px-2.5 py-1 text-xs font-medium ${
+                                                reg.status === "COMPLETED"
+                                                   ? "bg-blue-100 text-blue-800"
+                                                   : "bg-green-100 text-green-800"
+                                             }`}
+                                          >
+                                             {reg.status}
+                                          </span>
+                                       </td>
+                                       <td className="px-3 py-2 whitespace-nowrap">
+                                          {reg.result
+                                             ? `${reg.result.grade} (${reg.result.marks})`
+                                             : "-"}
                                        </td>
                                     </tr>
                                  ))}

@@ -24,6 +24,12 @@ export default function AllResultsPage() {
       setSearchTerm(searchInput.trim());
    };
 
+   const formatGradePoint = (gradePoint: string | number | null | undefined) => {
+      if (gradePoint === null || gradePoint === undefined) return "-";
+      const num = Number(gradePoint);
+      return Number.isNaN(num) ? "-" : num.toFixed(2);
+   };
+
    return (
       <div className="p-6">
          <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -87,7 +93,7 @@ export default function AllResultsPage() {
                            </td>
                            <td className="px-4 py-3">{result.marks}</td>
                            <td className="px-4 py-3 font-medium">{result.grade}</td>
-                           <td className="px-4 py-3">{result.gradePoint.toFixed(2)}</td>
+                           <td className="px-4 py-3">{formatGradePoint(result.gradePoint)}</td>
                            <td className="px-4 py-3">
                               {new Date(result.submittedAt).toLocaleDateString()}
                            </td>
